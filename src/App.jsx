@@ -1,18 +1,34 @@
 import React, { useState } from "react";
 import Login from "./components/Login";
-import Dashboard from "./components/Dashboard";
+import StudentLogin from "./components/StudentLogin";
+import AdminDashboard from "./components/AdminDashboard";
+import StudentDashboard from "./components/StudentDashboard";
+import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [role, setRole] = useState(""); // 'admin' or 'student'
+
+  const handleLogout = () => setRole("");
+
+  
 
   return (
-    <div>
-      {isAuthenticated ? (
-        <Dashboard onLogOut={() => setIsAuthenticated(false)} />
-      ) : (
-        <Login onLogin={() => setIsAuthenticated(true)} />
-      )}
-    </div>
+    <>
+      <Navbar role={role} onLogout={handleLogout} />
+      <div className="container mt-5">
+        {role === "admin" && <AdminDashboard onLogout={handleLogout} />}
+        {role === "student" && <StudentDashboard onLogout={handleLogout} />}
+        {!role && (
+          <div className="text-center">
+            <Login onLogin={() => setRole("admin")} />
+            <hr />
+            <StudentLogin onLogin={() => setRole("student")} />
+          </div>
+        )}
+      </div>
+      <Footer />
+    </>
   );
 }
 
