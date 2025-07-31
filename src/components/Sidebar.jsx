@@ -15,11 +15,6 @@ let Sidebar = ({ onLogOut }) => {
         <li>Dashboard</li>
         <li>Add Book</li>
         <li>Manage Users</li>
-        <li>Settings</li>
-        <li style={{ marginTop: "20px", color: "red", cursor: "pointer" }}
-          onClick={onLogOut} // Now onLogOut is a prop and can be called
-        >Logout
-        </li>
       </ul>
     </div>
   );
