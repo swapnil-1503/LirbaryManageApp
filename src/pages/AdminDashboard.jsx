@@ -1,6 +1,8 @@
 import React from "react";
-import Sidebar from "./Sidebar";
-import BookTable from "./BookTable";
+import Sidebar from "../components/Sidebar";
+
+import BookTable from "../components/BookTable";
+
 
 console.log("Admin Dashboard Rendered");
 

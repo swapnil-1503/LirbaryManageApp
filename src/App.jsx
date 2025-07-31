@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import Login from "./components/Login";
-import StudentLogin from "./components/StudentLogin";
-import AdminDashboard from "./components/AdminDashboard";
-import StudentDashboard from "./components/StudentDashboard";
+import Login from "./pages/Login";
+import StudentLogin from "./pages/StudentLogin";
+import AdminDashboard from "./pages/AdminDashboard";
+import StudentDashboard from "./pages/StudentDashboard";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 

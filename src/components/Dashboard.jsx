@@ -1,6 +1,6 @@
 
 import React from 'react';
-import Sidebar from './Sidebar'; 
+import Sidebar from './components/Sidebar'; 
 
 let Dashboard = ({ onLogOut }) => { // Dashboard receives onLogOut as a prop
   return (
