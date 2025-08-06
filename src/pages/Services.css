@@ -1,0 +1,98 @@
+.services-wrapper {
+  padding: 2rem;
+  max-width: 1300px;
+  margin: 0 auto;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+/* Header Section */
+.services-header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.services-header h1 {
+  font-size: 2.5rem;
+  color: #003366;
+  margin-bottom: 0.3rem;
+}
+
+.services-header .tagline {
+  font-size: 1.1rem;
+  color: #555;
+  font-style: italic;
+}
+
+/* Introduction Paragraph */
+.services-intro p {
+  text-align: justify;
+  font-size: 1rem;
+  line-height: 1.7;
+  color: #444;
+  margin-bottom: 2rem;
+}
+
+/* Grid Layout */
+.service-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+/* Service Box */
+.service-box {
+  background-color: #f5faff;
+  padding: 1.5rem;
+  border-radius: 10px;
+  border: 1px solid #dbe9f3;
+  transition: 0.3s ease-in-out;
+}
+
+.service-box h3 {
+  margin-bottom: 0.7rem;
+  color: #004080;
+}
+
+.service-box p {
+  color: #444;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.service-box:hover {
+  transform: translateY(-5px);
+  background-color: #e6f2ff;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Footer */
+.services-footer {
+ background-color: black;
+  text-align: center;
+  padding: 1rem;
+  font-size: 0.9rem;
+  color: white;
+  margin-top: 3rem;
+}
+
+/* Responsive Text */
+@media (max-width: 600px) {
+  .services-header h1 {
+    font-size: 1.8rem;
+  }
+
+  .services-header .tagline {
+    font-size: 1rem;
+  }
+
+  .services-intro p {
+    font-size: 0.95rem;
+  }
+
+  .services-footer {
+    font-size: 0.8rem;
+  }
+}

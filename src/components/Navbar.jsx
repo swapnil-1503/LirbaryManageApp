@@ -1,7 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import "./Navbar.css";
 
-// Accept all the new view-changing functions as props
 const Navbar = ({
   role,
   onLogout,
@@ -10,40 +9,63 @@ const Navbar = ({
   showStudentLogin,
   showContact,
   showAbout,
-  showServices
+  showServices,
 }) => {
-  return (
-    // The 'navbar' class typically makes this a flex container, allowing 'ms-auto' to work.
-    <nav className="navbar navbar-dark bg-dark px-4">
-      {/* Brand/Logo Section - Always on the left */}
-      <span className="navbar-brand">📚 Library Management</span>
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-      {/* Conditional rendering for ALL navigation links - only show if NOT logged in */}
+  const handleLinkClick = (action) => {
+    setIsMenuOpen(false);
+    action();
+  };
+
+  return (
+    <nav className="navbar">
+      {/* Hamburger for mobile */}
+      <div className="hamburger-container">
+        <button
+          className="hamburger"
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
+        >
+          ☰
+        </button>
+      </div>
+
+      {/* Left: Logo */}
+      <div className="navbar-left">
+        <a href="#" className="navbar-brand-link" onClick={showHome}>
+          <img
+            src="src/images/librarys.png"
+            alt="Library Logo"
+            className="navbar-logo-img"
+          />
+          <span className="navbar-brand">Library Management</span>
+        </a>
+      </div>
+
+      {/* Center: Navigation Links (only if not logged in) */}
       {!role && (
-        <div className="navv">
-          {/* Use onClick handlers to call the functions passed from App.jsx */}
-          <a href="#" onClick={showHome}>Home</a>
-          <a href="#" onClick={showContact}>Contact Us</a>
-          <a href="#" onClick={showAbout}>About Us</a>
-          <a href="#" onClick={showServices}>Services</a>
-          {/* Login links are already conditionally rendered within this block */}
-          <a href="#" onClick={showAdminLogin}>Admin Login</a>
-          <a href="#" onClick={showStudentLogin}>Student Login</a>
+        <div className={`navbar-center ${isMenuOpen ? "open" : ""}`}>
+          <a href="#" onClick={() => handleLinkClick(showHome)}>Home</a>
+          <a href="#" onClick={() => handleLinkClick(showContact)}>ContactUs</a>
+          <a href="#" onClick={() => handleLinkClick(showAbout)}>AboutUs</a>
+          <a href="#" onClick={() => handleLinkClick(showServices)}>Services</a>
         </div>
       )}
 
-      {/* Conditional rendering for Logout button - only show if logged in */}
-      {role && (
-        // Added 'ms-auto' to push the button to the far right.
-        <button className="btn btn-outline-light ms-auto" onClick={onLogout}>
-          Logout
-        </button>
-      )}
-      {/* The empty <span> for !role was removed as it's no longer needed and could affect layout. */}
+      {/* Right: Login/Logout */}
+      <div className={`navbar-right ${isMenuOpen ? "open" : ""}`}>
+        {!role ? (
+          <>
+            <a href="#" onClick={() => handleLinkClick(showAdminLogin)}>AdminLogin</a>
+            <a href="#" onClick={() => handleLinkClick(showStudentLogin)}>StudentLogin</a>
+          </>
+        ) : (
+          <button className="logout-btn" onClick={onLogout}>Logout</button>
+        )}
+      </div>
     </nav>
   );
 };
 
 export default Navbar;
-
 

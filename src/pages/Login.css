@@ -43,7 +43,7 @@ body {
 
 .input-icon input {
   width: 90%;
-  padding: 10px 10px 10px 35px; /* Extra left padding for icon */
+  padding: 10px 10px 10px 35px; 
   border: 1px solid #ccc;
   border-radius: 5px;
   outline: none;
