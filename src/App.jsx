@@ -54,13 +54,6 @@ function App() {
         <div className="home-background">
           <Home />
           <div className="text-center mt-4">
-            <p>Please select your login type:</p>
-            <button className="btn btn-primary mx-2" onClick={showAdminLogin}>
-              Admin Login
-            </button>
-            <button className="btn btn-secondary mx-2" onClick={showStudentLogin}>
-              Student Login
-            </button>
           </div>
         </div>
       ) : (
