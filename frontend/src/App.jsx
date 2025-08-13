@@ -52,15 +52,10 @@ function App() {
       {!role && currentUnauthenticatedView === "home" ? (
         <div className="home-background">
           <Home />
-<<<<<<< HEAD:src/App.jsx
-          <div className="text-center mt-4">
-          </div>
-=======
->>>>>>> recover:frontend/src/App.jsx
         </div>
       ) : (
         <div className="d-flex">
-          {/* ✅ RENDER AdminDashboard when role is admin */}
+          {/* Admin Dashboard */}
           {role === "admin" && <AdminDashboard onLogOut={handleLogout} />}
 
           <div
@@ -72,8 +67,10 @@ function App() {
               backgroundColor: "#f5f5f5",
             }}
           >
+            {/* Student Dashboard */}
             {role === "student" && <StudentDashboard onLogout={handleLogout} />}
 
+            {/* Unauthenticated Views */}
             {!role && currentUnauthenticatedView === "adminLogin" && (
               <Login onLogin={handleAdminLogin} />
             )}
