@@ -1,0 +1,161 @@
+ .navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-image: linear-gradient(#EEAECA, #94BBE9);
+  padding: 12px 24px;
+  flex-wrap: wrap;
+  position: relative;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.navbar-left,
+.navbar-center,
+.navbar-right {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-left {
+  flex: 1;
+}
+
+.navbar-center {
+  flex: 2;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.navbar-right {
+  flex: 1;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+
+.navbar-brand-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: rgb(221, 215, 215);
+}
+
+.navbar-logo-img {
+  height: 40px;
+  margin-right: 10px;
+}
+
+.navbar-brand {
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+
+.navbar-center a{
+text-decoration: none;
+  font-weight: 700;
+  font-size: 1rem;
+  color: #e7ede7;
+  padding: 8px 12px;
+  transition: color 0.3s ease, background-color 0.3s ease;
+}
+
+.navbar-right a {
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 1rem;
+  color: #0b0e0b;
+  padding: 8px 12px;
+  transition: color 0.3s ease, background-color 0.3s ease;
+}
+
+.navbar-center a:hover{
+  color: #f39c12;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+.navbar-right a:hover {
+  color: #38ea07;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+
+.logout-btn {
+  background-color: transparent;
+  border: 1px solid #ecf0f1;
+  color: #ecf0f1;
+  padding: 6px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.logout-btn:hover {
+  background-color: #e74c3c;
+  border-color: #e74c3c;
+  color: white;
+}
+
+
+.hamburger-container {
+  display: none;
+  position: absolute;
+  top: 12px;
+  right: 24px;
+}
+
+.hamburger {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 2rem;
+  cursor: pointer;
+  padding: 0;
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 16px;
+  }
+
+  .hamburger-container {
+    display: block;
+  }
+
+  .navbar-left {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .navbar-center,
+  .navbar-right {
+    display: none;
+    width: 100%;
+    flex-direction: column;
+    background-color: #34495e;
+    text-align: center;
+    padding: 12px 0;
+  }
+
+  .navbar-center.open,
+  .navbar-right.open {
+    display: flex;
+  }
+
+  .navbar-center a,
+  .navbar-right a {
+    padding: 12px 0;
+    width: 100%;
+    border-bottom: 1px solid #3d566e;
+  }
+
+  .logout-btn {
+    width: 90%;
+    margin: 10px auto;
+  }
+}
+  

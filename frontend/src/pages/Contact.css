@@ -1,0 +1,109 @@
+  .contact-container {
+  padding: 2rem;
+  max-width: 1100px;
+  margin: 0 auto;
+  background-color: #fff;
+  color: #333;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.contact-container h1 {
+  text-align: center;
+  font-size: 2.8rem;
+  margin-bottom: 1.5rem;
+  color: #2c3e50;
+}
+
+.intro {
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 1.1rem;
+  color: #555;
+}
+
+.contact-sections {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+}
+
+.contact-info,
+.contact-form {
+  flex: 1 1 45%;
+  padding: 1rem;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+}
+
+.contact-info h3,
+.contact-form h3 {
+  margin-bottom: 1rem;
+  color: #007bff;
+}
+
+.contact-form form {
+  display: flex;
+  flex-direction: column;
+}
+
+.contact-form label {
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.contact-form input,
+.contact-form textarea {
+  padding: 0.8rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.contact-form button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 0.8rem 1.2rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.contact-form button:hover {
+  background-color: #0056b3;
+}
+
+.support-section {
+  margin-top: 3rem;
+  padding: 1.5rem;
+  background-color: #f1f1f1;
+  border-left: 4px solid #007bff;
+  border-radius: 6px;
+}
+
+.support-section h3 {
+  margin-bottom: 0.8rem;
+  color: #007bff;
+}
+
+.map-section {
+  margin-top: 3rem;
+}
+
+.footer {
+ background-color: black;
+  text-align: center;
+  padding: 1rem;
+  font-size: 0.9rem;
+  color: white;
+  margin-top: 3rem;
+} 
+/* Make the full page layout occupy full height of the screen */
+.full-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #eef2f5;
+}
