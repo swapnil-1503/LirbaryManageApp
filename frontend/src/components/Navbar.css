@@ -2,7 +2,9 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-image: linear-gradient(#EEAECA, #94BBE9);
+  background: #8e9eab;  /* fallback for old browsers */
+background: -webkit-linear-gradient(to right, #eef2f3, #8e9eab);
+background: linear-gradient(to right, #eef2f3, #8e9eab); 
   padding: 12px 24px;
   flex-wrap: wrap;
   position: relative;
@@ -55,7 +57,7 @@
 text-decoration: none;
   font-weight: 700;
   font-size: 1rem;
-  color: #e7ede7;
+  color: #2bafbe;
   padding: 8px 12px;
   transition: color 0.3s ease, background-color 0.3s ease;
 }

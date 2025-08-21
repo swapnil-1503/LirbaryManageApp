@@ -1,0 +1,217 @@
+/* Container */
+.viewbooks-container {
+  width: 100%;
+  min-height: 80vh;
+  padding: 30px;
+  background: #f4f6f9;
+  font-family: "Segoe UI", Arial, sans-serif;
+  box-sizing: border-box;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Heading */
+.viewbooks-header {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 1.8rem;
+  color: #73b7c1;
+
+  font-weight: 600;
+}
+
+/* Table Wrapper (scroll for small screens) */
+.table-wrapper {
+  overflow-x: auto;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+/* Table */
+.books-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 800px;
+  table-layout: fixed;
+  margin: 0 auto;
+  border: none;
+}
+
+/* Column widths */
+.books-table th:nth-child(1), .books-table td:nth-child(1) { width: 15%; } /* Title */
+.books-table th:nth-child(2), .books-table td:nth-child(2) { width: 15%; } /* Author */
+.books-table th:nth-child(3), .books-table td:nth-child(3) { width: 10%; } /* Genre */
+.books-table th:nth-child(4), .books-table td:nth-child(4) { width: 8%; } /* Year */
+.books-table th:nth-child(5), .books-table td:nth-child(5) { width: 12%; } /* ISBN */
+.books-table th:nth-child(6), .books-table td:nth-child(6) { width: 8%; } /* Quantity */
+.books-table th:nth-child(7), .books-table td:nth-child(7) { width: 10%; } /* Available */
+.books-table th:nth-child(8), .books-table td:nth-child(8) { width: 22%; } /* Actions */
+
+.books-table th,
+.books-table td {
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid #e1dddd;
+  border-right: 1px solid #d1cfcf;
+  font-size: 0.95rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.books-table th:last-child,
+.books-table td:last-child {
+  border-right: none;
+}
+
+.books-table th {
+  background: #73b7c1;
+  color: #fff;
+  font-weight: 600;
+}
+
+/* Zebra striping */
+.books-table tr:nth-child(even) {
+  background: #f9f9f9;
+}
+
+/* Row hover effect */
+.books-table tbody tr:hover {
+  background-color: #e8f4f5;
+  transition: background-color 0.2s ease;
+}
+
+/* Inputs inside table */
+.books-table input,
+.books-table select {
+  width: 100%;
+  padding: 6px 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 0.9rem;
+  box-sizing: border-box;
+  max-width: 100%;
+  min-width: 50px;
+}
+
+/* Buttons */
+.btn {
+  padding: 6px 12px;
+  font-size: 0.85rem;
+  border: 1px solid pink;
+  border-radius: 5px;
+  margin-right: 5px;
+  cursor: pointer;
+  transition: 0.3s;
+  color: #fff;
+}
+
+.btn.primary {
+   color:white;
+  background: #20b806;
+}
+.btn.primary:hover {
+   color:white;
+  background: #0d47a1;
+}
+
+.btn.success {
+  color:white;
+  background: #6dd672;
+}
+.btn.success:hover {
+   color:white;
+  background: #1b5e20;
+}
+
+.btn.danger {
+   color:white;
+  background: #b11d1d;
+}
+.btn.danger:hover {
+   color:white;
+  background: #9a0007;
+}
+
+.btn.secondary {
+  background: #e6e3e3;
+}
+.btn.secondary:hover {
+  background: #a89b9b;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .viewbooks-container {
+    padding: 20px;
+  }
+  .books-table {
+    min-width: 700px;
+  }
+}
+
+@media (max-width: 992px) {
+  .viewbooks-container {
+    padding: 15px;
+  }
+  .books-table {
+    min-width: 650px;
+  }
+  .books-table th,
+  .books-table td {
+    padding: 10px 12px;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .viewbooks-container {
+    padding: 10px;
+  }
+  .viewbooks-header {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+  }
+  .books-table {
+    min-width: 600px;
+  }
+  .books-table th,
+  .books-table td {
+    padding: 8px 10px;
+    font-size: 0.85rem;
+  }
+  .btn {
+    padding: 5px 10px;
+    font-size: 0.8rem;
+    margin-bottom: 5px;
+    display: inline-block;
+  }
+}
+
+@media (max-width: 576px) {
+  .viewbooks-container {
+    padding: 8px;
+  }
+  .viewbooks-header {
+    font-size: 1.3rem;
+  }
+  .books-table {
+    min-width: 500px;
+  }
+  .books-table th,
+  .books-table td {
+    padding: 6px 8px;
+    font-size: 0.8rem;
+  }
+  .btn {
+    padding: 4px 8px;
+    font-size: 0.75rem;
+    margin-right: 3px;
+  }
+}

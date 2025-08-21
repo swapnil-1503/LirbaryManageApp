@@ -2,16 +2,15 @@ body {
   margin: 0;
   padding: 0;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #f0f2f5;
 }
 
 .login-box {
   width: 350px;
   margin: 100px auto;
   padding: 30px 25px;
-  background: #fff;
+  background: #c82c2c;
   border-radius: 10px;
-  box-shadow: 0 0 15px rgba(0,0,0,0.1);
+  box-shadow: 0 0 15px rgba(1,1,1,1.5);
 }
 
 .login-box h2 {

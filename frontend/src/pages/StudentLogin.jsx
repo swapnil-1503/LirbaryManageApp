@@ -31,9 +31,9 @@ const StudentLogin = ({ onLogin }) => {
   return (
     <div
       className="d-flex justify-content-center align-items-center vh-100"
-      style={{ backgroundColor: "#f8f9fa" }}
+      style={{ background: "linear-gradient(to right, #F8FFAE, #43C6AC)" }}
     >
-      <div className="card p-4 shadow" style={{ maxWidth: "400px", width: "100%" }}>
+      <div className="card p-4 shadow" style={{ maxWidth: "400px", width: "100%", backgroundColor:"transparent" }}>
         <h3 className="text-center mb-3">Student Login</h3>
         <form onSubmit={handleStudentLogin}>
           <div className="mb-3">
@@ -60,15 +60,27 @@ const StudentLogin = ({ onLogin }) => {
             Login as Student
           </button>
         </form>
+
         {error && <div className="alert alert-danger mt-3">{error}</div>}
-        <div className="text-center mt-3">
-          <button
-            type="button"
-            className="btn btn-link"
+
+        {/* Sign up link */}
+        <div style={{ textAlign: "center", marginTop: "15px" }}>
+          <span style={{ fontSize: "0.95rem", color: "#333" }}>
+            Don’t have an account?{" "}
+          </span>
+          <span
+            style={{
+              fontSize: "0.95rem",
+              color: "#007bff",
+              cursor: "pointer",
+              textDecoration: "none",
+            }}
+            onMouseOver={(e) => (e.target.style.textDecoration = "underline")}
+            onMouseOut={(e) => (e.target.style.textDecoration = "none")}
             onClick={handleRegisterClick}
           >
-            New Student? Register here
-          </button>
+            Register Here
+          </span>
         </div>
       </div>
     </div>

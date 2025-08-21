@@ -13,14 +13,14 @@ const AboutUs = () => {
 
       <div className="aboutus-content">
         <section className="aboutus-section">
-          <h2>📘 Our Vision</h2>
+          <h2> Our Vision</h2>
           <p>
             To digitally transform every library into a smart, accessible, and efficient knowledge center.
           </p>
         </section>
 
         <section className="aboutus-section">
-          <h2>🎯 Our Mission</h2>
+          <h2> Our Mission</h2>
           <p>
             We aim to simplify and automate library workflows to improve resource management, enhance
             user experience, and support digital literacy.
@@ -28,7 +28,7 @@ const AboutUs = () => {
         </section>
 
         <section className="aboutus-section">
-          <h2>🚀 Key Features</h2>
+          <h2> Key Features</h2>
           <ul>
             <li>Book lending and return management</li>
             <li>Live tracking of issued and available books</li>
@@ -40,7 +40,7 @@ const AboutUs = () => {
         </section>
 
         <section className="aboutus-section">
-          <h2>👨‍🏫 Who Can Use</h2>
+          <h2> Who Can Use</h2>
           <p>
             Our LMS is perfect for:
           </p>
@@ -53,7 +53,7 @@ const AboutUs = () => {
         </section>
 
         <section className="aboutus-section">
-          <h2>💡 Why Choose Us?</h2>
+          <h2> Why Choose Us?</h2>
           <ul>
             <li>Responsive and modern UI</li>
             <li>Cloud-ready and scalable</li>
@@ -74,7 +74,7 @@ const AboutUs = () => {
         </section>
 
         <section className="aboutus-section contact-link">
-          <h2>📞 Get in Touch</h2>
+          <h2> Get in Touch</h2>
           <p>
             Want to know more? Visit our <a href="/contact">Contact Us</a> page or write to us at <strong>info@lms.com</strong>
           </p>
@@ -82,7 +82,7 @@ const AboutUs = () => {
       </div>
 
       <footer className="aboutus-footer">
-        © 2025 Library Management System. Built with 📚 and ❤️ by passionate developers.
+        © 2025 Library Management System. Built with  and  by passionate developers.
       </footer>
     </div>
   );

@@ -19,9 +19,9 @@ const Login = ({ onLogin }) => {
   return (
     <div
       className="d-flex justify-content-center align-items-center vh-100"
-      style={{ backgroundColor: "#f8f9fa" }}
+      style={{ background: "linear-gradient(to right, #FFFFFF, #6DD5FA, #2980B9)" }}
     >
-      <div className="card p-5 shadow" style={{ maxWidth: "400px", width: "100%" }}>
+      <div className="card p-5 shadow" style={{ maxWidth: "400px", width: "100%", backgroundColor:"transparent" }}>
         <h3 className="text-center mb-4">Admin Login</h3>
         <form onSubmit={handleLogin}>
           <div className="mb-3">
