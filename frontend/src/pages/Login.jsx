@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import bgImage from "../images/loginbackground.jpg"; // ✅ import image
+import "./Login.css"; // ✅ import CSS
 
 const Login = ({ onLogin }) => {
   const [username, setUsername] = useState("");
@@ -9,28 +11,25 @@ const Login = ({ onLogin }) => {
 
   const handleLogin = (e) => {
     e.preventDefault();
-    // Login.jsx
-if (username === "admin" && password === "admin") {
-  onLogin(); // set role = admin
-  navigate("/admin/dashboard"); // ✅ match App.jsx route
-}
-else {
+    if (username === "admin" && password === "admin") {
+      onLogin();
+      navigate("/admin/dashboard");
+    } else {
       setError("Invalid Password ⚠️⚠️");
     }
   };
 
   return (
     <div
-      className="d-flex justify-content-center align-items-center vh-100"
+      className="login-container"
       style={{
-        background: "linear-gradient(to right, #FFFFFF, #6DD5FA, #2980B9)",
+        backgroundImage: `url(${bgImage})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
       }}
     >
-      <div
-        className="card p-5 shadow"
-        style={{ maxWidth: "400px", width: "100%", backgroundColor: "transparent" }}
-      >
-        <h3 className="text-center mb-4">Admin Login</h3>
+      <div className="login-box">
+        <h2>Admin Login</h2>
         <form onSubmit={handleLogin}>
           <div className="mb-3">
             <input
@@ -52,11 +51,11 @@ else {
               required
             />
           </div>
-          <button type="submit" className="btn btn-primary w-100">
+          <button type="submit" className="signin-btn">
             Login
           </button>
         </form>
-        {error && <div className="alert alert-danger mt-3">{error}</div>}
+        {error && <div className="error-text">{error}</div>}
       </div>
     </div>
   );

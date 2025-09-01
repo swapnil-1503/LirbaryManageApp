@@ -1,0 +1,97 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.student-login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+
+  /* ✅ Replace gradient with background image */
+  background: url("../assets/student-bg.jpg") no-repeat center center/cover;
+}
+
+.login-box {
+  width: 350px;
+  padding: 30px 25px;
+
+  /* ✅ Transparent background with frosted-glass effect */
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(10px);   /* Frosted effect */
+  -webkit-backdrop-filter: blur(10px); /* Safari support */
+  border: 1px solid rgba(255, 255, 255, 0.2);
+
+  text-align: center;
+}
+
+.login-box h2 {
+  margin-bottom: 25px;
+  color: #fff;   /* White text looks better on transparent */
+  font-weight: bold;
+}
+
+.input-icon {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.input-icon i {
+  position: absolute;
+  top: 50%;
+  left: 10px;
+  transform: translateY(-50%);
+  color: #fff;
+  font-size: 16px;
+}
+
+.input-icon input {
+  width: 90%;
+  padding: 10px 10px 10px 35px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  outline: none;
+  transition: border 0.3s;
+  background: rgba(255, 255, 255, 0.2); /* transparent input */
+  color: #fff;
+}
+
+.input-icon input::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.input-icon input:focus {
+  border-color: #007bff;
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.signin-btn {
+  width: 100%;
+  padding: 10px;
+  background: #007bff;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.signin-btn:hover {
+  background: #0056b3;
+}
+
+.error-text {
+  color: #ff4d4d;
+  margin-top: 10px;
+}
+
+.register-link {
+  margin-top: 15px;
+  font-size: 14px;
+  color: #fff;
+}

@@ -38,7 +38,6 @@ const Navbar = ({ role, onLogout }) => {
           <>
             <Link to="/admin/login">Admin Login</Link>        {/* ✅ Updated */}
             <Link to="/student/login">Student Login</Link>    {/* ✅ Updated */}
-            <Link to="/student/register">Register</Link>      {/* ✅ Added */}
           </>
         ) : (
           <button className="logout-btn" onClick={onLogout}>
