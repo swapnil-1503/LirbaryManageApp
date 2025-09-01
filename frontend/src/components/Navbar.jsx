@@ -36,8 +36,9 @@ const Navbar = ({ role, onLogout }) => {
       <div className={`navbar-right ${isMenuOpen ? "open" : ""}`}>
         {!role ? (
           <>
-            <Link to="/adminLogin">AdminLogin</Link>
-            <Link to="/studentLogin">StudentLogin</Link>
+            <Link to="/admin/login">Admin Login</Link>        {/* ✅ Updated */}
+            <Link to="/student/login">Student Login</Link>    {/* ✅ Updated */}
+            <Link to="/student/register">Register</Link>      {/* ✅ Added */}
           </>
         ) : (
           <button className="logout-btn" onClick={onLogout}>
@@ -50,4 +51,3 @@ const Navbar = ({ role, onLogout }) => {
 };
 
 export default Navbar;
-

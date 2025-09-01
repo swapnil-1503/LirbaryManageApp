@@ -1,5 +1,5 @@
 // models/book.js
-const db = require("../db");
+const db = require("../config/db");
 
 const Book = {
   // Add a new book

@@ -1,95 +1,48 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import StudentRegistration from "./StudentRegistration";
+import axios from "axios";
+import { Link, useNavigate } from "react-router-dom";
 
 const StudentLogin = ({ onLogin }) => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const [isRegistering, setIsRegistering] = useState(false);
-  const navigate = useNavigate();
+  const [student, setStudent] = useState({ email: "", password: "" });
+  const [msg, setMsg] = useState("");
+  const navigate = useNavigate(); // ✅ Add navigation
 
-  const handleStudentLogin = (e) => {
-    e.preventDefault();
-    if (username === "student" && password === "student") {
-      onLogin(); // set role = student
-      navigate("/studentDashboard"); // ✅ redirect
-    } else {
-      setError("Invalid student Password ⚠️⚠️");
-    }
-  };
+  const handleChange = (e) =>
+    setStudent({ ...student, [e.target.name]: e.target.value });
 
-  const handleRegisterClick = () => {
-    setIsRegistering(true);
-  };
+  const handleSubmit = async (e) => {
+  e.preventDefault();
+  try {
+    const res = await axios.post("http://localhost:5000/api/students/login", student);
 
-  const handleBackToLogin = () => {
-    setIsRegistering(false);
-  };
+    // Save token + student info
+    localStorage.setItem("studentToken", res.data.token);
+    localStorage.setItem("studentId", res.data.student.id);
 
-  if (isRegistering) {
-    return <StudentRegistration onBackToLogin={handleBackToLogin} />;
+    onLogin();
+    navigate("/student/dashboard");
+  } catch (err) {
+    setMsg("Error: " + err.response?.data?.message);
   }
+};
+
 
   return (
-    <div
-      className="d-flex justify-content-center align-items-center vh-100"
-      style={{ background: "linear-gradient(to right, #F8FFAE, #43C6AC)" }}
-    >
-      <div
-        className="card p-4 shadow"
-        style={{ maxWidth: "400px", width: "100%", backgroundColor: "transparent" }}
-      >
-        <h3 className="text-center mb-3">Student Login</h3>
-        <form onSubmit={handleStudentLogin}>
-          <div className="mb-3">
-            <input
-              type="text"
-              className="form-control"
-              placeholder="Username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              required
-            />
-          </div>
-          <div className="mb-3">
-            <input
-              type="password"
-              className="form-control"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
-          <button type="submit" className="btn btn-success w-100">
-            Login as Student
-          </button>
-        </form>
+    <form onSubmit={handleSubmit}>
+      <input name="email" placeholder="Email" onChange={handleChange} />
+      <input
+        type="password"
+        name="password"
+        placeholder="Password"
+        onChange={handleChange}
+      />
+      <button type="submit">Login</button>
+      <p>{msg}</p>
 
-        {error && <div className="alert alert-danger mt-3">{error}</div>}
-
-        {/* Sign up link */}
-        <div style={{ textAlign: "center", marginTop: "15px" }}>
-          <span style={{ fontSize: "0.95rem", color: "#333" }}>
-            Don’t have an account?{" "}
-          </span>
-          <span
-            style={{
-              fontSize: "0.95rem",
-              color: "#007bff",
-              cursor: "pointer",
-              textDecoration: "none",
-            }}
-            onMouseOver={(e) => (e.target.style.textDecoration = "underline")}
-            onMouseOut={(e) => (e.target.style.textDecoration = "none")}
-            onClick={handleRegisterClick}
-          >
-            Register Here
-          </span>
-        </div>
-      </div>
-    </div>
+      <p>
+        Don’t have an account? <Link to="/student/register">Register here</Link>
+      </p>
+    </form>
   );
 };
 

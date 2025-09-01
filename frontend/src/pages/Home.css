@@ -1,7 +1,9 @@
 .home-background {
   min-height: 100vh;
   width: 100%;
-  background-image: url('/src/images/library-hall.jpg');
+  background: 
+    linear-gradient(rgba(86, 85, 85, 0.6), rgba(87, 86, 86, 0.6)),
+    url('/src/images/library-hall.jpg');
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;

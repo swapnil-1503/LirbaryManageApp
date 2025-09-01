@@ -9,10 +9,12 @@ const Login = ({ onLogin }) => {
 
   const handleLogin = (e) => {
     e.preventDefault();
-    if (username === "admin" && password === "admin") {
-      onLogin(); // set role = admin
-      navigate("/adminDashboard"); // ✅ redirect
-    } else {
+    // Login.jsx
+if (username === "admin" && password === "admin") {
+  onLogin(); // set role = admin
+  navigate("/admin/dashboard"); // ✅ match App.jsx route
+}
+else {
       setError("Invalid Password ⚠️⚠️");
     }
   };

@@ -1,45 +1,88 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Sidebar from "../components/Sidebar";
 import AddBook from "./AddBook";
 import ViewBooks from "../components/ViewBooks";
-import "./AdminDashboard.css"; // Import CSS
+import ManageUsers from "./ManageUsers";
+import axios from "axios";
+import "./AdminDashboard.css";
 
 const AdminDashboard = ({ onLogOut }) => {
   const [adminView, setAdminView] = useState("dashboard");
+  const [stats, setStats] = useState({
+    bookCount: 0,
+    totalBooks: 0,
+    availableBooks: 0,
+    totalUsers: 0,
+    totalIssued: 0,
+  });
+  const [recentActivity, setRecentActivity] = useState([]);
+
+  useEffect(() => {
+    if (adminView === "dashboard") {
+      fetchStats();
+      fetchRecentActivity();
+    }
+  }, [adminView]);
+
+  const getAuthHeaders = () => ({
+    Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
+  });
+
+  const fetchStats = async () => {
+    try {
+      const res = await axios.get("http://localhost:5000/api/admin/stats", {
+        headers: getAuthHeaders(),
+      });
+      setStats(res.data);
+    } catch (err) {
+      console.error("Error fetching stats:", err);
+    }
+  };
+
+  const fetchRecentActivity = async () => {
+    try {
+      const res = await axios.get(
+        "http://localhost:5000/api/admin/recent-activity",
+        { headers: getAuthHeaders() }
+      );
+      setRecentActivity(res.data);
+    } catch (err) {
+      console.error("Error fetching recent activity:", err);
+    }
+  };
 
   return (
     <div className="admin-dashboard">
-      {/* Sidebar */}
-      <Sidebar setAdminView={setAdminView} />
+      <Sidebar setAdminView={setAdminView} onLogOut={onLogOut} />
 
-      {/* Main Content */}
       <div className="dashboard-content">
         {adminView === "dashboard" && (
           <div className="dashboard-container">
-            {/* Welcome Header */}
             <h2 className="dashboard-welcome">Welcome to Admin Dashboard</h2>
 
-            {/* Stats Cards */}
             <div className="stats-grid">
               <div className="stat-card">
-                <p className="stat-title">Total Books</p>
-                <p className="stat-value">320</p>
+                <p className="stat-title">Total Titles</p>
+                <p className="stat-value">{stats.bookCount}</p>
+              </div>
+              <div className="stat-card">
+                <p className="stat-title">Total Stock</p>
+                <p className="stat-value">{stats.totalBooks}</p>
               </div>
               <div className="stat-card">
                 <p className="stat-title">Available Books</p>
-                <p className="stat-value">270</p>
+                <p className="stat-value">{stats.availableBooks}</p>
               </div>
               <div className="stat-card">
                 <p className="stat-title">Users</p>
-                <p className="stat-value">85</p>
+                <p className="stat-value">{stats.totalUsers}</p>
               </div>
               <div className="stat-card">
                 <p className="stat-title">Active Loans</p>
-                <p className="stat-value">45</p>
+                <p className="stat-value">{stats.totalIssued}</p>
               </div>
             </div>
 
-            {/* Recent Activity */}
             <div className="recent-activity">
               <h3>Recent Activity</h3>
               <table>
@@ -52,24 +95,18 @@ const AdminDashboard = ({ onLogOut }) => {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>The Alchemist</td>
-                    <td>John Doe</td>
-                    <td>Borrowed</td>
-                    <td>2025-08-14</td>
-                  </tr>
-                  <tr>
-                    <td>Clean Code</td>
-                    <td>Jane Smith</td>
-                    <td>Returned</td>
-                    <td>2025-08-13</td>
-                  </tr>
-                  <tr>
-                    <td>Atomic Habits</td>
-                    <td>Mike Ross</td>
-                    <td>Borrowed</td>
-                    <td>2025-08-12</td>
-                  </tr>
+                  {recentActivity.map((act) => (
+                    <tr key={act.issue_id}>
+                      <td>{act.title}</td>
+                      <td>{act.student_name}</td>
+                      <td>{act.status === "issued" ? "Borrowed" : "Returned"}</td>
+                      <td>
+                        {act.status === "issued"
+                          ? new Date(act.issue_date).toLocaleDateString()
+                          : new Date(act.return_date).toLocaleDateString()}
+                      </td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>
@@ -78,10 +115,10 @@ const AdminDashboard = ({ onLogOut }) => {
 
         {adminView === "addBook" && <AddBook />}
         {adminView === "viewBooks" && <ViewBooks />}
+        {adminView === "manageUsers" && <ManageUsers />}
       </div>
     </div>
   );
 };
 
 export default AdminDashboard;
-
