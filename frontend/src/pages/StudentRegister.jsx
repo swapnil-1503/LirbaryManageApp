@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import axios from "../axiosInstance";
 import bgImage from "../images/studentrbg.jpg"; // ✅ Import image
 import "./StudentRegistration.css"; // ✅ Import CSS
 

@@ -22,6 +22,8 @@ app.use("/api/students", studentRoutes);
 const adminRoutes = require("./routes/adminRoutes");
 app.use("/api/admin", adminRoutes);
 
+const issueRoutes = require("./routes/issueRoutes");
+app.use("/api/issues", issueRoutes);
 
 module.exports = app;
 

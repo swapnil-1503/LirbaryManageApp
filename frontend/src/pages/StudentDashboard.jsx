@@ -1,92 +1,74 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import axios from "../axiosInstance";
 
 const StudentDashboard = () => {
   const [books, setBooks] = useState([]);
-  const [issuedBooks, setIssuedBooks] = useState([]);
+  const [requests, setRequests] = useState([]);
 
-  // ---------------- Auth headers ----------------
-  const getAuthHeaders = () => {
-    const token = localStorage.getItem("studentToken"); // token from login
-    return { Authorization: `Bearer ${token}` };
-  };
-
-  // ---------------- Fetch all books ----------------
+  // ------------------- Fetch all books -------------------
   const fetchBooks = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/books/list", {
-        headers: getAuthHeaders(),
-      });
+      const res = await axios.get("/books/list"); // token auto-included in axiosInstance
       setBooks(res.data);
     } catch (err) {
       console.error("Error fetching books:", err);
+      alert("Failed to fetch books");
     }
   };
 
-  // ---------------- Fetch issued books ----------------
-  const fetchIssuedBooks = async () => {
+  // ------------------- Fetch my requests -------------------
+  const fetchMyRequests = async () => {
     try {
-      const res = await axios.get(
-        "http://localhost:5000/api/books/issued", // no studentId needed
-        { headers: getAuthHeaders() }
-      );
-      setIssuedBooks(res.data);
+      const res = await axios.get("/issues/my"); // token auto-included
+      setRequests(res.data);
     } catch (err) {
-      console.error("Error fetching issued books:", err);
+      console.error("Error fetching my requests:", err);
+      alert(err.response?.data?.message || "Failed to fetch requests");
     }
   };
 
-  // ---------------- Issue a Book ----------------
-  const handleIssue = async (bookId) => {
+  // ------------------- Request a book -------------------
+  const handleRequest = async (bookId) => {
+    if (!bookId) return alert("Invalid book ID");
+
     try {
-      await axios.post(
-        "http://localhost:5000/api/books/issue",
-        { book_id: bookId }, // student_id taken from token in backend
-        { headers: getAuthHeaders() }
-      );
-      alert("Book issued successfully!");
-      fetchBooks();
-      fetchIssuedBooks();
+      console.log("Requesting book with book_id:", bookId);
+      await axios.post("/issues/request", { book_id: bookId });
+      alert("Request submitted. Wait for admin approval.");
+      fetchMyRequests();
     } catch (err) {
-      console.error("Error issuing book:", err);
-      alert(err.response?.data?.message || "Failed to issue book");
+      console.error("Error requesting book:", err);
+      alert(err.response?.data?.message || "Request failed");
     }
   };
 
-  // ---------------- Return a Book ----------------
+  // ------------------- Return a book -------------------
   const handleReturn = async (issueId) => {
+    if (!issueId) return alert("Invalid issue ID");
+
     try {
-      await axios.post(
-        "http://localhost:5000/api/books/return",
-        { issue_id: issueId },
-        { headers: getAuthHeaders() }
-      );
+      await axios.post("/books/return", { issue_id: issueId });
       alert("Book returned successfully!");
       fetchBooks();
-      fetchIssuedBooks();
+      fetchMyRequests();
     } catch (err) {
       console.error("Error returning book:", err);
       alert(err.response?.data?.message || "Failed to return book");
     }
   };
 
-  // ---------------- Fetch data on mount ----------------
   useEffect(() => {
     fetchBooks();
-    fetchIssuedBooks();
+    fetchMyRequests();
   }, []);
 
   return (
     <div className="container mt-4">
-      <h2 className="mb-4">📖 Available Books</h2>
+      <h2 className="mb-4">Available Books</h2>
       <table className="table table-striped">
         <thead>
           <tr>
-            <th>Title</th>
-            <th>Author</th>
-            <th>Genre</th>
-            <th>Available Quantity</th>
-            <th>Action</th>
+            <th>Title</th><th>Author</th><th>Genre</th><th>Qty</th><th>Action</th>
           </tr>
         </thead>
         <tbody>
@@ -100,9 +82,9 @@ const StudentDashboard = () => {
                 {book.quantity > 0 ? (
                   <button
                     className="btn btn-primary btn-sm"
-                    onClick={() => handleIssue(book.id)}
+                    onClick={() => handleRequest(book.id)}
                   >
-                    Issue
+                    Request
                   </button>
                 ) : (
                   <span className="text-danger">Not Available</span>
@@ -113,41 +95,32 @@ const StudentDashboard = () => {
         </tbody>
       </table>
 
-      <h2 className="mt-5 mb-4">📚 My Issued Books</h2>
+      <h2 className="mt-5">My Requests / Issued Books</h2>
       <table className="table table-bordered">
         <thead>
           <tr>
-            <th>Title</th>
-            <th>Author</th>
-            <th>Issued On</th>
-            <th>Return Date</th>
-            <th>Status</th>
-            <th>Action</th>
+            <th>Title</th><th>Requested On</th><th>Issued On</th><th>Return Date</th><th>Status</th><th>Action</th>
           </tr>
         </thead>
         <tbody>
-          {issuedBooks.map((ib) => (
-            <tr key={ib.issue_id}>
-              <td>{ib.title}</td>
-              <td>{ib.author}</td>
-              <td>{new Date(ib.issue_date).toLocaleDateString()}</td>
-              <td>{new Date(ib.return_date).toLocaleDateString()}</td>
+          {requests.map((r) => (
+            <tr key={r.issue_id}>
+              <td>{r.title}</td>
+              <td>{r.request_date ? new Date(r.request_date).toLocaleDateString() : "-"}</td>
+              <td>{r.issue_date ? new Date(r.issue_date).toLocaleDateString() : "-"}</td>
+              <td>{r.return_date ? new Date(r.return_date).toLocaleDateString() : "-"}</td>
+              <td>{r.status}</td>
               <td>
-                {ib.status === "issued" ? (
-                  <span className="badge bg-warning">Issued</span>
-                ) : (
-                  <span className="badge bg-success">Returned</span>
-                )}
-              </td>
-              <td>
-                {ib.status === "issued" && (
+                {r.status === "issued" && (
                   <button
                     className="btn btn-success btn-sm"
-                    onClick={() => handleReturn(ib.issue_id)}
+                    onClick={() => handleReturn(r.issue_id)}
                   >
                     Return
                   </button>
                 )}
+                {r.status === "pending" && <span className="text-warning">Pending</span>}
+                {r.status === "rejected" && <span className="text-danger">Rejected</span>}
               </td>
             </tr>
           ))}

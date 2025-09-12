@@ -1,19 +1,17 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
-import "./ViewBooks.css"; // import external CSS
+import axios from "../axiosInstance";
 
 const ViewBooks = () => {
   const [books, setBooks] = useState([]);
-  const [editingBookId, setEditingBookId] = useState(null);
+  const [editingBook, setEditingBook] = useState(null);
   const [editedBook, setEditedBook] = useState({});
 
-  // Fetch all books
   const fetchBooks = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/books/list");
+      const res = await axios.get("/books/list");
       setBooks(res.data);
-    } catch (error) {
-      console.error("Error fetching books:", error);
+    } catch (err) {
+      console.error("Error fetching books:", err);
     }
   };
 
@@ -21,98 +19,78 @@ const ViewBooks = () => {
     fetchBooks();
   }, []);
 
-  // Handle input change during edit
-  const handleChange = (e) => {
-    setEditedBook({ ...editedBook, [e.target.name]: e.target.value });
-  };
-
-  // Start editing a book
   const handleEdit = (book) => {
-    setEditingBookId(book.id);
+    setEditingBook(book.id);
     setEditedBook({ ...book });
   };
 
-  // Save edited book
   const handleSave = async (id) => {
     try {
-      await axios.put(`http://localhost:5000/api/books/${id}`, editedBook);
-      setEditingBookId(null);
+      await axios.put(`/books/${id}`, editedBook);
+      setEditingBook(null);
       fetchBooks();
-    } catch (error) {
-      console.error("Error updating book:", error);
+    } catch (err) {
+      console.error("Error updating book:", err);
     }
   };
 
-  // Delete a book
   const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this book?")) return;
     try {
-      await axios.delete(`http://localhost:5000/api/books/${id}`);
+      await axios.delete(`/books/${id}`);
       fetchBooks();
-    } catch (error) {
-      console.error("Error deleting book:", error);
+    } catch (err) {
+      console.error("Error deleting book:", err);
     }
   };
 
   return (
-    <div className="viewbooks-container">
-      <h2 className="viewbooks-header"> View Books</h2>
-      <div className="table-wrapper">
-        <table className="books-table">
-          <thead>
-            <tr>
-              <th>Title</th>
-              <th>Author</th>
-              <th>Genre</th>
-              <th>Year</th>
-              <th>ISBN</th>
-              <th>Quantity</th>
-              <th>Available</th>
-              <th>Actions</th>
+    <div>
+      <h2>Books List</h2>
+      <table border="1" cellPadding="8">
+        <thead>
+          <tr>
+            <th>Title</th><th>Author</th><th>Genre</th><th>Year</th>
+            <th>ISBN</th><th>Quantity</th><th>Status</th><th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {books.map((book) => (
+            <tr key={book.id}>
+              {editingBook === book.id ? (
+                <>
+                  <td><input value={editedBook.title} onChange={(e) => setEditedBook({ ...editedBook, title: e.target.value })} /></td>
+                  <td><input value={editedBook.author} onChange={(e) => setEditedBook({ ...editedBook, author: e.target.value })} /></td>
+                  <td><input value={editedBook.genre} onChange={(e) => setEditedBook({ ...editedBook, genre: e.target.value })} /></td>
+                  <td><input value={editedBook.published_year} onChange={(e) => setEditedBook({ ...editedBook, published_year: e.target.value })} /></td>
+                  <td><input value={editedBook.isbn} onChange={(e) => setEditedBook({ ...editedBook, isbn: e.target.value })} /></td>
+                  <td><input value={editedBook.quantity} onChange={(e) => setEditedBook({ ...editedBook, quantity: e.target.value })} /></td>
+                  <td>
+                    <select value={editedBook.available} onChange={(e) => setEditedBook({ ...editedBook, available: e.target.value })}>
+                      <option value="1">Available</option>
+                      <option value="0">Not Available</option>
+                    </select>
+                  </td>
+                  <td><button onClick={() => handleSave(book.id)}>Save</button></td>
+                </>
+              ) : (
+                <>
+                  <td>{book.title}</td>
+                  <td>{book.author}</td>
+                  <td>{book.genre}</td>
+                  <td>{book.published_year}</td>
+                  <td>{book.isbn}</td>
+                  <td>{book.quantity}</td>
+                  <td>{book.available ? "Available" : "Not Available"}</td>
+                  <td>
+                    <button onClick={() => handleEdit(book)}>Edit</button>
+                    <button onClick={() => handleDelete(book.id)}>Delete</button>
+                  </td>
+                </>
+              )}
             </tr>
-          </thead>
-          <tbody>
-            {books.map((book) => (
-              <tr key={book.id}>
-                {editingBookId === book.id ? (
-                  <>
-                    <td><input name="title" value={editedBook.title} onChange={handleChange} /></td>
-                    <td><input name="author" value={editedBook.author} onChange={handleChange} /></td>
-                    <td><input name="genre" value={editedBook.genre} onChange={handleChange} /></td>
-                    <td><input name="published_year" type="number" value={editedBook.published_year} onChange={handleChange} /></td>
-                    <td><input name="isbn" value={editedBook.isbn} onChange={handleChange} /></td>
-                    <td><input name="quantity" type="number" value={editedBook.quantity} onChange={handleChange} /></td>
-                    <td>
-                      <select name="available" value={editedBook.available} onChange={handleChange}>
-                        <option value={1}>Available</option>
-                        <option value={0}>Not Available</option>
-                      </select>
-                    </td>
-                    <td>
-                      <button className="btn success" onClick={() => handleSave(book.id)}>Save</button>
-                      <button className="btn secondary" onClick={() => setEditingBookId(null)}>Cancel</button>
-                    </td>
-                  </>
-                ) : (
-                  <>
-                    <td>{book.title}</td>
-                    <td>{book.author}</td>
-                    <td>{book.genre}</td>
-                    <td>{book.published_year}</td>
-                    <td>{book.isbn}</td>
-                    <td>{book.quantity}</td>
-                    <td>{book.available ? "Yes" : "No"}</td>
-                    <td>
-                      <button className="btn primary" onClick={() => handleEdit(book)}>Edit</button>
-                      <button className="btn danger" onClick={() => handleDelete(book.id)}>Delete</button>
-                    </td>
-                  </>
-                )}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 };

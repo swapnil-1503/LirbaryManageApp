@@ -1,126 +1,17 @@
-// import React, { useEffect, useState } from "react";
-// import axios from "axios";
-
-// const ManageUsers = () => {
-//   const [students, setStudents] = useState([]);
-//   const [editing, setEditing] = useState(null);
-//   const [form, setForm] = useState({ name: "", email: "" });
-
-//   const fetchStudents = async () => {
-//     try {
-//       const res = await axios.get("http://localhost:5000/api/students");
-//       setStudents(res.data);
-//     } catch (err) {
-//       console.error(err);
-//     }
-//   };
-
-//   useEffect(() => {
-//     fetchStudents();
-//   }, []);
-
-//   const handleEdit = (student) => {
-//     setEditing(student.id);
-//     setForm({ name: student.name, email: student.email });
-//   };
-
-//   const handleUpdate = async (id) => {
-//     try {
-//       await axios.put(`http://localhost:5000/api/students/${id}`, form);
-//       setEditing(null);
-//       fetchStudents();
-//     } catch (err) {
-//       console.error(err);
-//     }
-//   };
-
-//   const handleDelete = async (id) => {
-//     if (window.confirm("Are you sure you want to delete this user?")) {
-//       try {
-//         await axios.delete(`http://localhost:5000/api/students/${id}`);
-//         fetchStudents();
-//       } catch (err) {
-//         console.error(err);
-//       }
-//     }
-//   };
-
-//   return (
-//     <div>
-//       <h2>Manage Users</h2>
-//       <table border="1" width="100%">
-//         <thead>
-//           <tr>
-//             <th>Name</th>
-//             <th>Email</th>
-//             <th>Created At</th>
-//             <th>Actions</th>
-//           </tr>
-//         </thead>
-//         <tbody>
-//           {students.map((s) => (
-//             <tr key={s.id}>
-//               <td>
-//                 {editing === s.id ? (
-//                   <input
-//                     value={form.name}
-//                     onChange={(e) => setForm({ ...form, name: e.target.value })}
-//                   />
-//                 ) : (
-//                   s.name
-//                 )}
-//               </td>
-//               <td>
-//                 {editing === s.id ? (
-//                   <input
-//                     value={form.email}
-//                     onChange={(e) => setForm({ ...form, email: e.target.value })}
-//                   />
-//                 ) : (
-//                   s.email
-//                 )}
-//               </td>
-//               <td>{new Date(s.created_at).toLocaleString()}</td>
-//               <td>
-//                 {editing === s.id ? (
-//                   <>
-//                     <button onClick={() => handleUpdate(s.id)}>Save</button>
-//                     <button onClick={() => setEditing(null)}>Cancel</button>
-//                   </>
-//                 ) : (
-//                   <>
-//                     <button onClick={() => handleEdit(s)}>Edit</button>
-//                     <button onClick={() => handleDelete(s.id)}>Delete</button>
-//                   </>
-//                 )}
-//               </td>
-//             </tr>
-//           ))}
-//         </tbody>
-//       </table>
-//     </div>
-//   );
-// };
-
-// export default ManageUsers;
-
-
-
 import React, { useEffect, useState } from "react";
-import axios from "axios";
-import "./ManageUsers.css"; // ✅ Import CSS
+import axios from "../axiosInstance";
 
 const ManageUsers = () => {
   const [students, setStudents] = useState([]);
-  const [editing, setEditing] = useState(null);
-  const [form, setForm] = useState({ name: "", email: "" });
+  const [editingStudent, setEditingStudent] = useState(null);
+  const [form, setForm] = useState({});
 
   const fetchStudents = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/students");
+      const res = await axios.get("/students");
       setStudents(res.data);
     } catch (err) {
-      console.error(err);
+      console.error("Error fetching students:", err);
     }
   };
 
@@ -129,90 +20,61 @@ const ManageUsers = () => {
   }, []);
 
   const handleEdit = (student) => {
-    setEditing(student.id);
-    setForm({ name: student.name, email: student.email });
+    setEditingStudent(student.id);
+    setForm({ ...student });
   };
 
-  const handleUpdate = async (id) => {
+  const handleSave = async (id) => {
     try {
-      await axios.put(`http://localhost:5000/api/students/${id}`, form);
-      setEditing(null);
+      await axios.put(`/students/${id}`, form);
+      setEditingStudent(null);
       fetchStudents();
     } catch (err) {
-      console.error(err);
+      console.error("Error updating student:", err);
     }
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm("Are you sure you want to delete this user?")) {
-      try {
-        await axios.delete(`http://localhost:5000/api/students/${id}`);
-        fetchStudents();
-      } catch (err) {
-        console.error(err);
-      }
+    try {
+      await axios.delete(`/students/${id}`);
+      fetchStudents();
+    } catch (err) {
+      console.error("Error deleting student:", err);
     }
   };
 
   return (
-    <div className="manage-container">
-      <h2>Manage Users</h2>
-      <div className="table-wrapper">
-        <table className="user-table">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Created At</th>
-              <th>Actions</th>
+    <div>
+      <h2>Manage Students</h2>
+      <table border="1" cellPadding="8">
+        <thead>
+          <tr>
+            <th>Name</th><th>Email</th><th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {students.map((s) => (
+            <tr key={s.id}>
+              {editingStudent === s.id ? (
+                <>
+                  <td><input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} /></td>
+                  <td><input value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} /></td>
+                  <td><button onClick={() => handleSave(s.id)}>Save</button></td>
+                </>
+              ) : (
+                <>
+                  <td>{s.name}</td>
+                  <td>{s.email}</td>
+                  <td>
+                    <button onClick={() => handleEdit(s)}>Edit</button>
+                    <button onClick={() => handleDelete(s.id)}>Delete</button>
+                  </td>
+                </>
+              )}
             </tr>
-          </thead>
-          <tbody>
-            {students.map((s) => (
-              <tr key={s.id}>
-                <td>
-                  {editing === s.id ? (
-                    <input
-                      value={form.name}
-                      onChange={(e) =>
-                        setForm({ ...form, name: e.target.value })
-                      }
-                    />
-                  ) : (
-                    s.name
-                  )}
-                </td>
-                <td>
-                  {editing === s.id ? (
-                    <input
-                      value={form.email}
-                      onChange={(e) =>
-                        setForm({ ...form, email: e.target.value })
-                      }
-                    />
-                  ) : (
-                    s.email
-                  )}
-                </td>
-                <td>{new Date(s.created_at).toLocaleString()}</td>
-                <td>
-                  {editing === s.id ? (
-                    <>
-                      <button className="btn save" onClick={() => handleUpdate(s.id)}>Save</button>
-                      <button className="btn cancel" onClick={() => setEditing(null)}>Cancel</button>
-                    </>
-                  ) : (
-                    <>
-                      <button className="btn edit" onClick={() => handleEdit(s)}>Edit</button>
-                      <button className="btn delete" onClick={() => handleDelete(s.id)}>Delete</button>
-                    </>
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 };

@@ -3,97 +3,73 @@ const db = require("../config/db");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
-// ======================
-// Helper: Generate JWT
-// ======================
-const generateToken = (id, email) => {
-  return jwt.sign(
-    { id, email },
-    process.env.JWT_SECRET || "secret", // fallback if JWT_SECRET missing
-    { expiresIn: "1h" }
-  );
-};
-
-// ======================
+// ==========================
 // Register Student
-// ======================
+// ==========================
 exports.registerStudent = async (req, res) => {
-  const { name, email, password } = req.body;
-
   try {
+    const { name, email, password } = req.body;
+
     if (!name || !email || !password) {
       return res.status(400).json({ message: "All fields are required" });
     }
 
-    // 1. Check if student already exists
-    const [existing] = await db.query(
-      "SELECT id FROM students WHERE email = ?",
-      [email]
-    );
-
+    // Check if student already exists
+    const [existing] = await db.query("SELECT id FROM students WHERE email = ?", [email]);
     if (existing.length > 0) {
-      return res.status(400).json({ message: "Student already exists" });
+      return res.status(400).json({ message: "Email already registered" });
     }
 
-    // 2. Hash password
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
+    // Hash password
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-    // 3. Insert new student
-    const [result] = await db.query(
-      "INSERT INTO students (name, email, password) VALUES (?, ?, ?)",
+    await db.query(
+      "INSERT INTO students (name, email, password, role) VALUES (?, ?, ?, 'student')",
       [name, email, hashedPassword]
     );
 
-    // 4. Generate token
-    const token = generateToken(result.insertId, email);
-
-    return res.status(201).json({
-      message: "Student registered successfully",
-      token,
-      student: {
-        id: result.insertId,
-        name,
-        email,
-      },
-    });
+    res.status(201).json({ message: "Student registered successfully" });
   } catch (err) {
     console.error("Error in registerStudent:", err);
-    return res.status(500).json({ message: "Server error" });
+    res.status(500).json({ message: "Server error" });
   }
 };
 
-// ======================
+// ==========================
 // Login Student
-// ======================
+// ==========================
+// ==========================
+// Login Student
+// ==========================
 exports.loginStudent = async (req, res) => {
-  const { email, password } = req.body;
-
   try {
+    const { email, password } = req.body;
+
     if (!email || !password) {
       return res.status(400).json({ message: "Email and password are required" });
     }
 
-    // 1. Find student
-    const [rows] = await db.query(
-      "SELECT * FROM students WHERE email = ?",
-      [email]
-    );
+    // Fetch student
+    const [rows] = await db.query("SELECT * FROM students WHERE email = ?", [email]);
 
-    if (rows.length === 0) {
+    if (!rows || rows.length === 0) {
       return res.status(400).json({ message: "Invalid credentials" });
     }
 
-    const student = rows[0];
+    const student = rows[0]; // ✅ rows[0] is the student record
 
-    // 2. Compare password
+    // Compare password
     const isMatch = await bcrypt.compare(password, student.password);
     if (!isMatch) {
       return res.status(400).json({ message: "Invalid credentials" });
     }
 
-    // 3. Generate token
-    const token = generateToken(student.id, student.email);
+    // Generate token
+    const token = jwt.sign(
+      { id: student.id, email: student.email, role: student.role },
+      process.env.JWT_SECRET || "secret",
+      { expiresIn: "1h" }
+    );
 
     return res.json({
       message: "Login successful",
@@ -102,47 +78,120 @@ exports.loginStudent = async (req, res) => {
         id: student.id,
         name: student.name,
         email: student.email,
-      },
+        role: student.role
+      }
     });
   } catch (err) {
     console.error("Error in loginStudent:", err);
     return res.status(500).json({ message: "Server error" });
   }
 };
-// Get all students
+
+// ==========================
+// Admin-only: Get all students
+// ==========================
 exports.getAllStudents = async (req, res) => {
   try {
-    const [students] = await db.query("SELECT id, name, email, created_at FROM students");
-    res.json(students);
+    const [rows] = await db.query("SELECT id, name, email, role FROM students");
+    return res.json(rows);
   } catch (err) {
-    console.error("Error fetching students:", err);
-    res.status(500).json({ message: "Server error" });
+    console.error("Error in getAllStudents:", err);
+    return res.status(500).json({ message: "Server error" });
   }
 };
 
-// Update student
+// ==========================
+// Admin-only: Update student
+// ==========================
 exports.updateStudent = async (req, res) => {
   const { id } = req.params;
-  const { name, email } = req.body;
+  const { name, email, role } = req.body;
 
   try {
-    await db.query("UPDATE students SET name = ?, email = ? WHERE id = ?", [name, email, id]);
-    res.json({ message: "Student updated successfully" });
+    await db.query(
+      "UPDATE students SET name = ?, email = ?, role = ? WHERE id = ?",
+      [name, email, role, id]
+    );
+    return res.json({ message: "Student updated successfully" });
   } catch (err) {
-    console.error("Error updating student:", err);
-    res.status(500).json({ message: "Server error" });
+    console.error("Error in updateStudent:", err);
+    return res.status(500).json({ message: "Server error" });
   }
 };
 
-// Delete student
+// ==========================
+// Admin-only: Delete student
+// ==========================
 exports.deleteStudent = async (req, res) => {
   const { id } = req.params;
 
   try {
     await db.query("DELETE FROM students WHERE id = ?", [id]);
-    res.json({ message: "Student deleted successfully" });
+    return res.json({ message: "Student deleted successfully" });
   } catch (err) {
-    console.error("Error deleting student:", err);
-    res.status(500).json({ message: "Server error" });
+    console.error("Error in deleteStudent:", err);
+    return res.status(500).json({ message: "Server error" });
+  }
+};
+
+// ==========================
+// Student: Get profile
+// ==========================
+exports.getProfile = async (req, res) => {
+  try {
+    const [rows] = await db.query(
+      "SELECT id, name, email, role FROM students WHERE id = ?",
+      [req.user.id]
+    );
+    if (rows.length === 0) {
+      return res.status(404).json({ message: "Student not found" });
+    }
+    return res.json(rows[0]);
+  } catch (err) {
+    console.error("Error in getProfile:", err);
+    return res.status(500).json({ message: "Server error" });
+  }
+};
+
+// ==========================
+// Student: Request a book
+// ==========================
+exports.requestBook = async (req, res) => {
+  const { bookId } = req.body;
+
+  try {
+    if (!bookId) {
+      return res.status(400).json({ message: "Book ID is required" });
+    }
+
+    await db.query(
+      "INSERT INTO book_requests (student_id, book_id, status) VALUES (?, ?, 'pending')",
+      [req.user.id, bookId]
+    );
+
+    return res.status(201).json({ message: "Book request submitted" });
+  } catch (err) {
+    console.error("Error in requestBook:", err);
+    return res.status(500).json({ message: "Server error" });
+  }
+};
+
+// ==========================
+// Student: Get issued books
+// ==========================
+exports.getIssuedBooks = async (req, res) => {
+  try {
+    const [rows] = await db.query(
+      `SELECT b.id, b.title, b.author, ib.issue_date, ib.return_date
+       FROM issued_books ib
+       JOIN books b ON ib.book_id = b.id
+       WHERE ib.student_id = ?`,
+      [req.user.id]
+    );
+
+    return res.json(rows);
+  } catch (err) {
+    console.error("Error in getIssuedBooks:", err);
+    return res.status(500).json({ message: "Server error" });
   }
 };

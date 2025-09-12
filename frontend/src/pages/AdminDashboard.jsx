@@ -3,7 +3,8 @@ import Sidebar from "../components/Sidebar";
 import AddBook from "./AddBook";
 import ViewBooks from "../components/ViewBooks";
 import ManageUsers from "./ManageUsers";
-import axios from "axios";
+import axios from "../axiosInstance";
+import ManageRequests from "./ManageRequests";
 import "./AdminDashboard.css";
 
 const AdminDashboard = ({ onLogOut }) => {
@@ -85,12 +86,12 @@ const AdminDashboard = ({ onLogOut }) => {
 
             <div className="recent-activity">
               <h3>Recent Activity</h3>
-              <table>
+              <table className="table table-striped">
                 <thead>
                   <tr>
                     <th>Book</th>
                     <th>User</th>
-                    <th>Action</th>
+                    <th>Status</th>
                     <th>Date</th>
                   </tr>
                 </thead>
@@ -99,11 +100,19 @@ const AdminDashboard = ({ onLogOut }) => {
                     <tr key={act.issue_id}>
                       <td>{act.title}</td>
                       <td>{act.student_name}</td>
-                      <td>{act.status === "issued" ? "Borrowed" : "Returned"}</td>
+                      <td>
+                        {act.status === "issued"
+                          ? "Issued"
+                          : act.status === "returned"
+                          ? "Returned"
+                          : "Pending"}
+                      </td>
                       <td>
                         {act.status === "issued"
                           ? new Date(act.issue_date).toLocaleDateString()
-                          : new Date(act.return_date).toLocaleDateString()}
+                          : act.status === "returned"
+                          ? new Date(act.return_date).toLocaleDateString()
+                          : "-"}
                       </td>
                     </tr>
                   ))}
@@ -116,6 +125,7 @@ const AdminDashboard = ({ onLogOut }) => {
         {adminView === "addBook" && <AddBook />}
         {adminView === "viewBooks" && <ViewBooks />}
         {adminView === "manageUsers" && <ManageUsers />}
+        {adminView === "manageRequests" && <ManageRequests />}
       </div>
     </div>
   );

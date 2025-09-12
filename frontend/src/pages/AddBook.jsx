@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./AddBook.css";
 
+
 const AddBook = () => {
   const [book, setBook] = useState({
     title: "",
@@ -18,44 +19,50 @@ const AddBook = () => {
     setBook({ ...book, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const res = await fetch("http://localhost:5000/api/books/add", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...book,
-          published_year: book.published_year
-            ? parseInt(book.published_year)
-            : null,
-          quantity: parseInt(book.quantity),
-          available: parseInt(book.available),
-        }),
-      });
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  try {
+    const adminToken = localStorage.getItem("adminToken"); // get token
 
-      const data = await res.json();
-      if (!res.ok) {
-        setMessage(data.message || "Failed to add book");
-        return;
-      }
-      setMessage(data.message);
+    const res = await fetch("http://localhost:5000/api/books/add", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${adminToken}`, // attach token
+      },
+      body: JSON.stringify({
+        ...book,
+        published_year: book.published_year
+          ? parseInt(book.published_year)
+          : null,
+        quantity: parseInt(book.quantity),
+        available: parseInt(book.available),
+      }),
+    });
 
-      // Reset form
-      setBook({
-        title: "",
-        author: "",
-        genre: "",
-        published_year: "",
-        isbn: "",
-        quantity: "",
-        available: "1",
-      });
-    } catch (error) {
-      console.error("Error adding book:", error);
-      setMessage("Failed to add book. Make sure backend is running.");
+    const data = await res.json();
+    if (!res.ok) {
+      setMessage(data.message || "Failed to add book");
+      return;
     }
-  };
+    setMessage(data.message);
+
+    // Reset form
+    setBook({
+      title: "",
+      author: "",
+      genre: "",
+      published_year: "",
+      isbn: "",
+      quantity: "",
+      available: "1",
+    });
+  } catch (error) {
+    console.error("Error adding book:", error);
+    setMessage("Failed to add book. Make sure backend is running.");
+  }
+};
+
 
   return (
     <div className="addbook-container">

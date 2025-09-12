@@ -18,6 +18,10 @@ const Sidebar = ({ setAdminView }) => {
       <button onClick={() => setAdminView("manageUsers")} className="sidebar-btn">
         <FaUsers className="sidebar-icon" /> Manage Users
       </button>
+      <button onClick={() => setAdminView("manageRequests")} className="sidebar-btn">
+        <FaList className="sidebar-icon" /> Manage Requests
+      </button>
+
     </div>
   );
 };

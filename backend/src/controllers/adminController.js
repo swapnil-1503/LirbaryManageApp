@@ -1,22 +1,31 @@
-// controllers/adminController.js
 const db = require("../config/db");
+const jwt = require("jsonwebtoken");
+
+// ✅ Admin login
+const login = (req, res) => {
+  const { username, password } = req.body;
+
+  // Simple hardcoded check for now
+  if (username === "admin" && password === "admin") {
+    // Create JWT token
+    const token = jwt.sign(
+      { role: "admin" },
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" }
+    );
+    return res.json({ token });
+  }
+
+  res.status(401).json({ message: "Invalid credentials" });
+};
 
 // ✅ Get Dashboard Stats
 const getDashboardStats = async (req, res) => {
   try {
-    // Total titles
     const [titles] = await db.query("SELECT COUNT(*) AS bookCount FROM books");
-
-    // Total stock
     const [totalBooks] = await db.query("SELECT SUM(quantity) AS totalBooks FROM books");
-
-    // Available books
     const [availableBooks] = await db.query("SELECT SUM(quantity) AS availableBooks FROM books WHERE quantity > 0");
-
-    // Total users
     const [users] = await db.query("SELECT COUNT(*) AS totalUsers FROM students");
-
-    // Total active issued books
     const [issued] = await db.query("SELECT COUNT(*) AS totalIssued FROM issued_books WHERE status='issued'");
 
     res.json({
@@ -52,4 +61,4 @@ const getRecentActivity = async (req, res) => {
   }
 };
 
-module.exports = { getDashboardStats, getRecentActivity };
+module.exports = { getDashboardStats, getRecentActivity, login };

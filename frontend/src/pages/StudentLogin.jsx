@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import axios from "../axiosInstance";
 import { Link, useNavigate } from "react-router-dom";
 import "./StudentLogin.css"; // ✅ Import CSS
 import bgImage from "../images/studentbg.jpg"; // ✅ Import background image (adjust path)
